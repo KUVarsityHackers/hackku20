@@ -2,6 +2,7 @@ const express = require('express')
 const SerialPort = require('serialport')
 const app = express()
 const port = 3000
+
 const sport = new SerialPort('/dev/ttyACM0', {baudRate:9600})
 
 var awslot = require('aws-iot-device-skd');
