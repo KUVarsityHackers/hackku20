@@ -1,0 +1,12 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "linehopper.tech",
+  "subdomains": [
+    {
+      "domain": "energy.linehopper.tech",
+      "type": "awsS3Website",
+      "s3BucketName": "2h8usd7-kllnp0c"
+    }
+  ]
+}
