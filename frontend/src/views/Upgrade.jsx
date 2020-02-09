@@ -1,7 +1,7 @@
 /*!
 
 =========================================================
-* Light Bootstrap Dashboard React - v1.3.0
+* Cryptility React - v1.3.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
@@ -31,8 +31,8 @@ class Icons extends Component {
             <Col md={8} mdOffset={2}>
               <Card
                 hCenter
-                title="Light Bootstrap Dashboard PRO React"
-                category="Are you looking for more components? Please check our Premium Version of Light Bootstrap Dashboard React."
+                title="Cryptility PRO React"
+                category="Are you looking for more components? Please check our Premium Version of Cryptility React."
                 ctTableResponsive
                 ctTableFullWidth
                 ctTableUpgrade

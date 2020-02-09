@@ -1,7 +1,7 @@
 /*!
 
 =========================================================
-* Light Bootstrap Dashboard React - v1.3.0
+* Cryptility React - v1.3.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
@@ -22,6 +22,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import { Card } from "components/Card/Card.jsx";
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 import { Tasks } from "components/Tasks/Tasks.jsx";
+import logo from "assets/img/xrpLogo.png";
 import {
   dataPie,
   legendPie,
@@ -37,7 +38,7 @@ import {
 
 var AWS = require('aws-sdk/dist/aws-sdk-react-native');
 var QRCode = require('qrcode.react');
-var walletAddr = "rfquzNgK8eb4LjR8Mf47SKpL78xTjm42YN";
+var walletAddr = "XVJpuQqHWBZcRaj6w4hcn4niiGijbaobeM64Usrwii2CJow";
 
 AWS.config.update({
   accessKeyId: "ASIAWA26SJVXYXKIOSMH", 
@@ -63,7 +64,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currBalance: 0,
+      currBalance: 20,
       walletBalanceCurrent:  {
         labels: [],
         series: []
@@ -73,7 +74,6 @@ class Dashboard extends Component {
   }
 
   updateBalance = async () => {
-    //get current balance from dynamodb
 
     var params = {
     
@@ -114,7 +114,7 @@ class Dashboard extends Component {
       series: []
     }
     data.Items.forEach(item => {
-      if(Date.now() - item.date.N < 3600000) {
+      if(Date.now() - item.date.N < 900000) {
         walletStates.series.push(item.reading.S)
         walletStates.labels.push(item.date.N.toString())
       }
@@ -145,6 +145,7 @@ class Dashboard extends Component {
 
 
   componentDidMount() {
+    this.updateBalance()
     this.currentUsageInit()
     setInterval(this.currentUsageInit, 2000);
     setInterval(this.updateBalance, 2000);
@@ -160,16 +161,16 @@ class Dashboard extends Component {
             <Col lg={4 } sm={6}>
               <StatsCard
                 bigIcon={<i className="pe-7s-wallet text-warning" />}
-                statsText="Wallet Balance"
-                statsValue={"" + this.state.currBalance}
+                statsText="Wallet Balance (XRP)"
+                statsValue={"" + (this.state.currBalance-20).toFixed(3)}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now" 
               />
             </Col>
             <Col lg={4 } sm={6}>
               <StatsCard
-                bigIcon={<i className="fa fa-twitter text-info" />}
-                statsText="Xrp Spent(1 hour)"
+                bigIcon={<img src={logo} />}
+                statsText="Xrp Spent (15 min.)"
                 statsValue={"" + this.state.moneySpentLastHour.toFixed(3)}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
@@ -178,10 +179,10 @@ class Dashboard extends Component {
             <Col lg={4} sm={6}>
               <StatsCard
                 bigIcon={<i className="pe-7s-graph1 text-danger" />}
-                statsText="Cost (XRP KwH)"
+                statsText="Current Cost (XRP/kWH)"
                 statsValue=".034"
                 statsIcon={<i className="fa fa-clock-o" />}
-                statsIconText="In the last hour"
+                statsIconText="In the last 15 minutes"
               />
             </Col>
 
@@ -192,7 +193,7 @@ class Dashboard extends Component {
                 statsIcon="fa fa-history"
                 id="usage"
                 title="Current Usage"
-                category="Past Hour"
+                category="Past 15 Minutes"
                 stats="Updated now"
                 content={
                   <div className="ct-chart">
@@ -220,7 +221,7 @@ class Dashboard extends Component {
                         alignItems: "center"
                       }}
                     >
-                    <QRCode value={walletAddr}/>
+                    <QRCode value={walletAddr} size={300} includeMargin={true} />
                     </div>
                   }
                 />

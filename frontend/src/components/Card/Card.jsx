@@ -1,7 +1,7 @@
 /*!
 
 =========================================================
-* Light Bootstrap Dashboard React - v1.3.0
+* Cryptility React - v1.3.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
@@ -36,13 +36,13 @@ export class Card extends Component {
         >
           {this.props.content}
 
-          <div className="footer">
+          {/* <div className="footer">
             {this.props.legend}
             {this.props.stats != null ? <hr /> : ""}
             <div className="stats">
               <i className={this.props.statsIcon} /> {this.props.stats}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
