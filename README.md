@@ -39,4 +39,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * Used a react template for the dashboard
 * Used many node packages, shoutout to npm
+* Note, this repo is missing the firmware being run on the IoT device
 
