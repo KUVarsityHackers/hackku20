@@ -6,6 +6,7 @@ const app = express()
 
 let debts = [];
 let on = "ON";
+let missedPayCt = 0;
 
 app.get('/', function (req, res) {
 
@@ -28,7 +29,13 @@ app.get('/off', function (req,res) {
 });
 
 app.get('/pay/:amt', function (req, res) {
-    on = "ON";
+    if(missedPayCt > 5) {
+        on = "OFF";
+    }
+    else {
+        on = "ON"
+        missedPayCt++;
+    }
     amt = req.params['amt'];
     console.log(amt);
     debts.push(amt);
@@ -36,6 +43,7 @@ app.get('/pay/:amt', function (req, res) {
 });
 
 app.get('/settle', function (req, res) {
+    missedPayCt = 0;
     if(debts.length == 0) {
         res.send("No debts to settle");
     }
