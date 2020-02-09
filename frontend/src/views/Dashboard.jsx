@@ -37,9 +37,9 @@ import {
 
 var AWS = require('aws-sdk/dist/aws-sdk-react-native');
 AWS.config.update({
-  accessKeyId: "ASIAWA26SJVXUWBKJGVB", 
-  secretAccessKey: "QptSM48fhn5q6PmOQ7RAvYdYf2PGIfaym6MQJ6nG", 
-  sessionToken : "FwoGZXIvYXdzEEgaDHLh865rPKxwWgyjAyK+AUqhdPvgi127Abx5uHfud07mZ5NiQTwHZ5vF+x9nYbWOtIugkEJpbeNrSIS4+ZCGqzZupvz9aNyc1vjh9tFfWO2pGnVfNpHf6kli+pIcTq9xptlpzKCnqbXxNUcNmwWKxXYFleNrwUsF1QM5wu37RU57BeLtQmoJlr16+/VlWGrwHH5vdIecazsgZqTrshEbLUZExowpc3xgCG1fEVjaNjOIDhZmsfEdfSJ2pFaiWrfr/+jWeKBGGjYGteS18IUo7fb88QUyLdw/4NX4VbpToXWPDMi+OlFIuxRqDGebbOFOy7CjcZyihfzDq9I1/p9WExrjPA==",
+  accessKeyId: "ASIAWA26SJVXZPLUYGGT", 
+  secretAccessKey: "d1Wphp5qq8jGwn2l9EP6Y2sHaE7EO/C5/6r3Uo/R", 
+  sessionToken : "FwoGZXIvYXdzEE0aDALTCxzzif8tr5vN8SK+AbTzGRwHoFtyvEl+/lwi/Vixjp2MtQdNNDvklbYNGbNYnLdJvfXbCQOPAaoad0Eapw8HkL2ZsuMPNnSPsLU/Np1kD4j7qTvWZGI/xfjXiToBTXBgS35Bemf301Z63iJcoM1db22zIicpok7m19/PAHLof59eDAO/Shbs+4zT6GEwx1hzcpex2kj13rBZGi4R92JPEl1tMJgINsjDfeZtdGiYhGnUQs4UK6KbRLfcdxlJP402aa0Ts/dbTy+ecyIogvn98QUyLeEa1tqVDvdoJwoO/ObZickz/5fy5aPA0yrejWHnFHtpRD5ccpzVTMDm0gA+UA==",
   region:'us-east-1'
 });
 
@@ -60,7 +60,11 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currBalance: 0
+      currBalance: 0,
+      walletBalance:  {
+        labels: [],
+        series: []
+      }
     };
   }
 
@@ -82,12 +86,57 @@ class Dashboard extends Component {
     };
 
     var data = await dynamodb.query(params).promise();
-    console.log(data.Items[0].drops.N)
-    this.setState({currBalance: data.Items[0].drops.N})
+    this.setState({currBalance: (parseInt(data.Items[0].walletBalance.S) / 100000).toString()})
   }
-  
+
+  energyUsageInit = async () => {
+    var params = {
+    
+      TableName: 'SensorData',
+      KeyConditionExpression: '#pk = :key',
+
+      ExpressionAttributeValues: {
+        ":key": {"S" : "XVfkVt54arhWBMyWGq7ogsdTkeREmLSj6b4G7tGukY8SmSk"}
+      },
+      ExpressionAttributeNames: {
+        "#pk": "publicKey"
+      }
+
+    };
+
+    let data = await dynamodb.query(params).promise();
+    let walletStates= {
+      labels: [],
+      series: []
+    }
+    data.Items.forEach(item => {
+      walletStates.labels.push(item.date.N.toString())
+      walletStates.series.push(item.reading.S)
+    });
+    let showDates = Math.floor(walletStates.labels.length / 5);
+    console.log(showDates)
+    for(let i=0; i<walletStates.labels.length;i++) {
+      if(i%showDates!=0) {
+        walletStates.labels[i] = "";
+      } else {
+        let newDate = new Date();
+        newDate.setUTCMilliseconds(-Date.now());
+        newDate.setUTCMilliseconds(parseInt(walletStates.labels[i]));
+        console.log(newDate)
+
+        walletStates.labels[i] = (newDate.getMonth().toString() + "/" + newDate.getDate().toString())
+        
+      }
+    }
+    let newSeries=walletStates.series;
+    walletStates.series = [newSeries];
+    this.setState({walletBalance: walletStates});
+
+  }
+
   componentDidMount() {
-    setInterval(this.updateBalance, 1000);
+    this.energyUsageInit()
+    setInterval(this.updateBalance, 4000);
   }
 
 
@@ -145,7 +194,7 @@ class Dashboard extends Component {
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
-                      data={dataSales}
+                      data={this.state.walletBalance}
                       type="Line"
                       options={optionsSales}
                       responsiveOptions={responsiveSales}
