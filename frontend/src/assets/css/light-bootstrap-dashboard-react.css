@@ -1,8 +1,8 @@
 /*!
 
  =========================================================
- * Light Bootstrap Dashboard React - v1.3.0
- * Based on Light Bootstrap Dashboard - v1.3.0
+ * Cryptility React - v1.3.0
+ * Based on Cryptility - v1.3.0
  =========================================================
 
  * Product Page: http://www.creative-tim.com/product/light-bootstrap-dashboard-react
@@ -273,12 +273,12 @@ input:focus {
     .sidebar .nav li.open > a,
     .sidebar .nav li.open > a:focus,
     .sidebar .nav li.open > a:hover {
-      background: rgba(255, 255, 255, 0.13);
+      background: rgba(255, 255, 255, 0);
       opacity: 1; }
     .sidebar .nav li.active > a {
       color: #FFFFFF;
       opacity: 1;
-      background: rgba(255, 255, 255, 0.23); }
+      background: rgba(255, 255, 255, 0); }
     .sidebar .nav p {
       margin: 0;
       line-height: 30px;
@@ -435,7 +435,7 @@ body > .navbar-collapse[data-color="purple"]:after {
   background-size: 150% 150%; }
 
 .main-panel {
-  background: rgba(203, 203, 210, 0.15);
+  background: blue;
   position: relative;
   float: right;
   width: calc(100% - 260px); }
@@ -2629,7 +2629,7 @@ body > .navbar-collapse[data-color="purple"]:after {
       position: relative;
       z-index: 4;
       overflow-y: scroll;
-      height: calc(100vh - 61px);
+      height: calc(100vh);
       width: 100%; }
     .sidebar::before {
       top: 0;
