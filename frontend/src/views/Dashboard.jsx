@@ -35,6 +35,16 @@ import {
   legendBar
 } from "variables/Variables.jsx";
 
+var AWS = require('aws-sdk/dist/aws-sdk-react-native');
+AWS.config.update({
+  accessKeyId: "ASIAWA26SJVXUWBKJGVB", 
+  secretAccessKey: "QptSM48fhn5q6PmOQ7RAvYdYf2PGIfaym6MQJ6nG", 
+  sessionToken : "FwoGZXIvYXdzEEgaDHLh865rPKxwWgyjAyK+AUqhdPvgi127Abx5uHfud07mZ5NiQTwHZ5vF+x9nYbWOtIugkEJpbeNrSIS4+ZCGqzZupvz9aNyc1vjh9tFfWO2pGnVfNpHf6kli+pIcTq9xptlpzKCnqbXxNUcNmwWKxXYFleNrwUsF1QM5wu37RU57BeLtQmoJlr16+/VlWGrwHH5vdIecazsgZqTrshEbLUZExowpc3xgCG1fEVjaNjOIDhZmsfEdfSJ2pFaiWrfr/+jWeKBGGjYGteS18IUo7fb88QUyLdw/4NX4VbpToXWPDMi+OlFIuxRqDGebbOFOy7CjcZyihfzDq9I1/p9WExrjPA==",
+  region:'us-east-1'
+});
+
+var dynamodb = new AWS.DynamoDB();
+
 class Dashboard extends Component {
   createLegend(json) {
     var legend = [];
@@ -46,6 +56,42 @@ class Dashboard extends Component {
     }
     return legend;
   }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currBalance: 0
+    };
+  }
+
+  updateBalance = async () => {
+    //get current balance from dynamodb
+
+    var params = {
+    
+      TableName: 'balance',
+      KeyConditionExpression: '#pk = :key',
+
+      ExpressionAttributeValues: {
+        ":key": {"S" : "XVfkVt54arhWBMyWGq7ogsdTkeREmLSj6b4G7tGukY8SmSk"}
+      },
+      ExpressionAttributeNames: {
+        "#pk": "publicKey"
+      }
+
+    };
+
+    var data = await dynamodb.query(params).promise();
+    console.log(data.Items[0].drops.N)
+    this.setState({currBalance: data.Items[0].drops.N})
+  }
+  
+  componentDidMount() {
+    setInterval(this.updateBalance, 1000);
+  }
+
+
+
   render() {
     return (
       <div className="content">
@@ -55,7 +101,7 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="pe-7s-server text-warning" />}
                 statsText="Wallet Balance"
-                statsValue="45 XRP"
+                statsValue={"" + this.state.currBalance}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
