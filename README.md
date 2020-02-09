@@ -19,7 +19,6 @@ Explain how to run the automated tests for this system
 * Node and express.js
 * ReactJS
 * Serverless
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
 ## Versioning
 
