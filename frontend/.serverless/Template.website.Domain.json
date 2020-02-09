@@ -1,0 +1,12 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "linehopper.tech",
+  "subdomains": [
+    {
+      "domain": "cryptility.linehopper.tech",
+      "type": "awsS3Website",
+      "s3BucketName": "pt704y-75bub6j"
+    }
+  ]
+}

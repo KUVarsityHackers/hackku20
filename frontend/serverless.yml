@@ -1,0 +1,8 @@
+name: cryptility
+
+website:
+  component: '@serverless/website'
+  inputs:
+    code:
+      src: build
+    domain: cryptility.linehopper.tech
